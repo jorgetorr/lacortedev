@@ -18,56 +18,56 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.aplicacion.model.User;
-import com.example.aplicacion.service.UserService;
+import com.example.aplicacion.model.Cita;
+import com.example.aplicacion.service.CitaService;
 
 @RestController
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/api/citas")
+public class CitaController {
 	
 	@Autowired
-	private UserService userService;
+	private CitaService citaService;
 	
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody User user){
-		return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+	public ResponseEntity<?> create(@RequestBody Cita cita){
+		return ResponseEntity.status(HttpStatus.CREATED).body(citaService.save(cita));
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> read(@PathVariable Integer id){
-		Optional<User> user = userService.findById(id);
-		if(!user.isPresent()) {
+		Optional<Cita> cita = citaService.findById(id);
+		if(!cita.isPresent()) {
 			return ResponseEntity.notFound().build();
 		} 
-		return ResponseEntity.ok(user);
+		return ResponseEntity.ok(cita);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@RequestBody User userDetalle, @PathVariable Integer id){
-		Optional<User> user = userService.findById(id);
-		if(!user.isPresent()) {
+	public ResponseEntity<?> update(@RequestBody Cita citaDetalle, @PathVariable Integer id){
+		Optional<Cita> cita = citaService.findById(id);
+		if(!cita.isPresent()) {
 			return ResponseEntity.notFound().build();
 		} 
-		BeanUtils.copyProperties(userDetalle, user.get());
-		user.get().setIduser(id);
-		return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user.get()));
+		BeanUtils.copyProperties(citaDetalle, cita.get());
+		cita.get().setIdcita(id);
+		return ResponseEntity.status(HttpStatus.CREATED).body(citaService.save(cita.get()));
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id){
-		Optional<User> user = userService.findById(id);
-		if(!user.isPresent()) {
+		Optional<Cita> cita = citaService.findById(id);
+		if(!cita.isPresent()) {
 			return ResponseEntity.notFound().build();
 		} 
-		userService.deleteById(id);
+		citaService.deleteById(id);
 		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping
-	public List<User> readAll(){
-		List<User> users= StreamSupport
-				.stream(userService.findAll().spliterator(), false)
+	public List<Cita> readAll(){
+		List<Cita> citas = StreamSupport
+				.stream(citaService.findAll().spliterator(), false)
 				.collect(Collectors.toList());
-		return users;
+		return citas;
 	}
 }

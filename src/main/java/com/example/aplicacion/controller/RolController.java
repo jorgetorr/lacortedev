@@ -18,56 +18,56 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.aplicacion.model.User;
-import com.example.aplicacion.service.UserService;
+import com.example.aplicacion.model.Rol;
+import com.example.aplicacion.service.RolService;
 
 @RestController
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/api/roles")
+public class RolController {
 	
 	@Autowired
-	private UserService userService;
+	private RolService rolService;
 	
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody User user){
-		return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+	public ResponseEntity<?> create(@RequestBody Rol rol){
+		return ResponseEntity.status(HttpStatus.CREATED).body(rolService.save(rol));
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> read(@PathVariable Integer id){
-		Optional<User> user = userService.findById(id);
-		if(!user.isPresent()) {
+		Optional<Rol> rol = rolService.findById(id);
+		if(!rol.isPresent()) {
 			return ResponseEntity.notFound().build();
 		} 
-		return ResponseEntity.ok(user);
+		return ResponseEntity.ok(rol);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@RequestBody User userDetalle, @PathVariable Integer id){
-		Optional<User> user = userService.findById(id);
-		if(!user.isPresent()) {
+	public ResponseEntity<?> update(@RequestBody Rol rolDetalle, @PathVariable Integer id){
+		Optional<Rol> rol = rolService.findById(id);
+		if(!rol.isPresent()) {
 			return ResponseEntity.notFound().build();
 		} 
-		BeanUtils.copyProperties(userDetalle, user.get());
-		user.get().setIduser(id);
-		return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user.get()));
+		BeanUtils.copyProperties(rolDetalle, rol.get());
+		rol.get().setIdrol(id);
+		return ResponseEntity.status(HttpStatus.CREATED).body(rolService.save(rol.get()));
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id){
-		Optional<User> user = userService.findById(id);
-		if(!user.isPresent()) {
+		Optional<Rol> rol = rolService.findById(id);
+		if(!rol.isPresent()) {
 			return ResponseEntity.notFound().build();
 		} 
-		userService.deleteById(id);
+		rolService.deleteById(id);
 		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping
-	public List<User> readAll(){
-		List<User> users= StreamSupport
-				.stream(userService.findAll().spliterator(), false)
+	public List<Rol> readAll(){
+		List<Rol> roles = StreamSupport
+				.stream(rolService.findAll().spliterator(), false)
 				.collect(Collectors.toList());
-		return users;
+		return roles;
 	}
 }
